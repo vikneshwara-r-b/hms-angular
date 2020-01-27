@@ -1,0 +1,19 @@
+.profile-button
+{
+    display: flex;
+    justify-content: center;
+    padding-top: 5%;
+}
+.margin-mover
+{
+    margin-right: 5px;
+}
+.card-layout
+{
+    margin-left: 8%;
+    margin-top: 2%;
+ }
+.card-box
+{
+    margin-left: 2%;
+}
