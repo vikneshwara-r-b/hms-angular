@@ -1,0 +1,24 @@
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" (click)="onCreateClick()">
+    Create
+  </button>
+ <div class="container">
+    <div class="row" >
+      <div class="col-3 border" *ngFor="let user of allusers;let i = index">
+          <img class="card-img-top img-fluid" src="https://www.w3schools.com/bootstrap4/img_avatar1.png" alt="Card image" style="width:100%">
+          <div class="card-body">
+            <h4 class="card-title">{{user.userUsername}}</h4>
+            <p class="card-text">Age:{{user.userAge}}</p>
+            <p class="card-text">State:{{user.userState}}</p>
+            <p class="card-text">UserId:{{user.pkUserId}}</p>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLabel" (click)="sendValues(user)">
+        Update
+      </button>
+            <span style="margin-left:4%">
+              <button type="button" class="btn btn-primary"  (click)="onDeletePressed(i)">
+                Delete
+              </button> 
+            </span>
+           </div>
+         </div>
+        </div>
+  </div>

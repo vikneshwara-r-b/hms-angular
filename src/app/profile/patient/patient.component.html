@@ -1,96 +1,89 @@
-<router-outlet></router-outlet>
-<button type="button" class="btn btn-primary" (click)="createModal=true" >
-  Create a new Patient
-</button>     
-<div class="row card-margin" >
-<div class="card" style="width:300px;margin: 5px;" *ngFor="let patient of allpatients;let i = index">
-    <img class="card-img-top" src="https://www.w3schools.com/bootstrap4/img_avatar1.png" alt="Card image" style="width:100%">
-    <div class="card-body">
-      <h4 class="card-title">{{patient.userUsername}}</h4>
-      <p class="card-text">Age:{{patient.userAge}}</p>
-      <p class="card-text">State:{{patient.userState}}</p>
-      <p class="card-text">UserId:{{patient.pkUserId}}</p>
-<button type="button" class="btn btn-primary" (click)="showPopup(i)">Update</button>
-      <span style="margin-left:4%">
-        <button type="button" class="btn btn-primary"  (click)="onDeletePressed(i)">
-          Delete
-        </button> 
-      </span>
+<app-card-details [allusers]="allpatients" 
+(sendUserValues)="sendValues($event)" 
+(setEmptyValues)="onCreateClick($event)"
+(sendDeletingIndex)="onDeletePressed($event)"
+>
+</app-card-details>
 <!--To create a patient-->
-      <div class="modal fade" [ngClass]="{'show':createModal}" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Create</h5>
-              <button type="button" class="close" data-dismiss="modal" (click)="createModal=false" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">UserName</label>
-                  <input type="text" class="form-control"  [(ngModel)]="createdpatient.userUsername" [ngModelOptions]="{standalone: true}">
-                </div>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Password:</label>
-                  <input type="password" class="form-control"  [(ngModel)]="createdpatient.userPassword" [ngModelOptions]="{standalone: true}">
-                </div>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Email:</label>
-                  <input type="email" class="form-control"  [(ngModel)]="createdpatient.userEmail" [ngModelOptions]="{standalone: true}">
-                </div>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">PhoneNumber:</label>
-                  <input type="text" class="form-control"  [(ngModel)]="createdpatient.userPhonenumber" [ngModelOptions]="{standalone: true}">
-                </div>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">FirstName:</label>
-                  <input type="text" class="form-control"  [(ngModel)]="createdpatient.userFirstname" [ngModelOptions]="{standalone: true}">
-                </div>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">LastName:</label>
-                  <input type="text" class="form-control"  [(ngModel)]="createdpatient.userLastname" [ngModelOptions]="{standalone: true}">
-                </div>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Age:</label>
-                  <input type="number" class="form-control"  [(ngModel)]="createdpatient.userAge" [ngModelOptions]="{standalone: true}">
-                </div>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">City</label>
-                  <input type="text" class="form-control"  [(ngModel)]="createdpatient.userCity" [ngModelOptions]="{standalone: true}">
-                </div>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">State</label>
-                  <input type="text" class="form-control"  [(ngModel)]="createdpatient.userState" [ngModelOptions]="{standalone: true}">
-                </div>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Street</label>
-                  <input type="text" class="form-control"  [(ngModel)]="createdpatient.userStreet" [ngModelOptions]="{standalone: true}">
-                </div>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Height:</label>
-                  <input type="number" class="form-control"  [(ngModel)]="createdpatient.patientHeight" [ngModelOptions]="{standalone: true}">
-                </div>
-                <div class="form-group">
-                  <label for="message-text" class="col-form-label">Weight:</label>
-                  <input type="number" class="form-control"  [(ngModel)]="createdpatient.patientWeight" [ngModelOptions]="{standalone: true}">
-                </div>
-                <div class="form-group">
-                    <label for="message-text" class="col-form-label">Blood Group:</label>
-                    <input type="text" class="form-control"  [(ngModel)]="createdpatient.patientBloodGroup" [ngModelOptions]="{standalone: true}">
-                  </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="createModal=false" >Close</button>
-              <button type="button" class="btn btn-primary" (click)="onCreatePressed()">Create</button>
-            </div>
+<div class="modal fade"  id="myModal" role="dialog" [ngClass]="{'showModal': true}">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Create</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="patientForm" (ngSubmit)="onCreatePressed()">
+          <div class="row">
+          <div class="form-group col">
+            <label for="recipient-name" class="col-form-label">UserName</label>
+            <input type="text"  formControlName="userUsername" class="form-control" >
+          </div>
+          <div class="form-group col">
+            <label for="recipient-name" class="col-form-label">Password:</label>
+            <input type="password"  formControlName="userPassword" class="form-control"  >
           </div>
         </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="recipient-name" class="col-form-label">Email:</label>
+            <input type="email"  formControlName="userEmail" class="form-control"   >
+          </div>
+          <div class="form-group col">
+            <label for="recipient-name" class="col-form-label">PhoneNumber:</label>
+            <input type="text"  formControlName="userPhonenumber" class="form-control" >
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="recipient-name" class="col-form-label">FirstName:</label>
+            <input type="text"  formControlName="userFirstname" class="form-control"  >
+          </div>
+          <div class="form-group col">
+            <label for="recipient-name" class="col-form-label">LastName:</label>
+            <input type="text" class="form-control"  formControlName="userLastname" >
+          </div>
+          <div class="form-group col">
+            <label for="recipient-name" class="col-form-label">Age:</label>
+            <input type="number" class="form-control"  formControlName="userAge" >
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="recipient-name" class="col-form-label">City</label>
+            <input type="text" class="form-control"  formControlName="userCity">
+          </div>
+          <div class="form-group col">
+              <label for="recipient-name" class="col-form-label">State</label>
+            <input type="text" class="form-control"  formControlName="userState">
+          </div>
+          <div class="form-group col">
+            <label for="recipient-name" class="col-form-label">Street</label>
+            <input type="text" class="form-control"  formControlName="userStreet"></div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="recipient-name" class="col-form-label">Height:</label>
+            <input type="number" class="form-control"  formControlName="patientHeight"></div>
+          <div class="form-group col">
+            <label for="message-text" class="col-form-label">Weight:</label>
+            <input type="number" class="form-control"  formControlName="patientWeight"></div>
+          <div class="form-group col">
+              <label for="message-text" class="col-form-label">Blood Group:</label>
+              <input type="text" class="form-control"  formControlName="patientBloodGroup">
+            </div>
+          </div>
+              <button type="submit" class="btn btn-primary" data-dismiss="modal" [disabled]="patientForm.invalid">Create</button>
+        </form>
       </div>
-      <!--To update a patient-->
-      <div class="modal fade"  [ngClass]="{'show':showModal}" >
+    </div>
+  </div>
+</div>
+   
+<!--To update a patient-->
+<div class="modal fade"  id="exampleModalLabel" >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -100,35 +93,30 @@
               </button>
             </div>
             <div class="modal-body">
-              <form>
+              <form [formGroup]="patientForm" (ngSubmit)="onUpdatePressed()">
                 <div class="form-group">
                   <label for="recipient-name" class="col-form-label">Height:</label>
-                  <input type="number" class="form-control"  [(ngModel)]="allpatients[index].patientHeight" [ngModelOptions]="{standalone: true}">
+                  <input type="number" class="form-control"  formControlName="patientHeight"  >
                 </div>
                 <div class="form-group">
                   <label for="message-text" class="col-form-label">Weight:</label>
-                  <input type="number" class="form-control"  [(ngModel)]="allpatients[index].patientWeight" [ngModelOptions]="{standalone: true}">
+                  <input type="number" class="form-control"  formControlName="patientWeight" >
                 </div>
                 <div class="form-group">
                     <label for="message-text" class="col-form-label">Blood Group:</label>
-                    <input type="text" class="form-control"  [(ngModel)]="allpatients[index].patientBloodGroup" [ngModelOptions]="{standalone: true}">
+                    <input type="text" class="form-control" formControlName="patientBloodGroup">
+                    <div *ngIf="bloodGroup.errors?.valid" class="invalid-feedback">
+                      Blood Group is invalid
+                 </div>
                   </div>
               </form>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="showModal=false" >Close</button>
-              <button type="button" class="btn btn-primary" (click)="onUpdatePressed(allpatients[index])">Update</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" (click)="onUpdatePressed(patientForm.value)"  data-dismiss="modal" aria-label="Close">Update</button>
             </div>
           </div>
         </div>
       </div>
 
-     </div>
-
-  </div>
-
- 
-
-
-</div>
-
+     

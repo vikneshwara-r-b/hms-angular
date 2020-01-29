@@ -1,16 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '../user.service';
 import { Router} from '@angular/router';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit{
     Username:string;
     leftButton:boolean=false;
     rightButton:boolean=false;
-  constructor(private userService:UserService,private router:Router) { }
+    messages: any[] = [];
+    subscription: Subscription;
+  constructor(private userService:UserService,private router:Router) {
+ console.log("Inside profile constructor");
+   }
 
   ngOnInit() {
     this.Username = this.userService.getEmail();
